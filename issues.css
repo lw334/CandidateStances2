@@ -1,0 +1,31 @@
+g:hover {
+  cursor:pointer;
+}
+
+.select {
+  font-size: 15px;
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  top: 100%;
+}
+
+.select select {
+  outline: none;
+  -webkit-appearance: none;
+  display: block;
+  padding: 0.3em;
+  margin: 0;
+
+  transition: border-color 0.2s;
+  border: 2px solid #EB5168;
+  border-radius: 3px;
+
+  background: #fff;
+  color: #555;
+  line-height: normal;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
