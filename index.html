@@ -13,40 +13,22 @@
 	 		</div>
 
 			<div class="row">
-			  <div class="col-md-2"></div>
-			  <div class="col-md-8"><div class="scatter-plot"></div></div>
-			  <div class="col-md-2"></div>
+			  <div class="col-md-2">
+			  	<p id="co" class="state-label">Colorado</p>
+			  	<p id="ky" class="state-label">Kentucky</p>
+			  	<p id="il" class="state-label">Illinois</p>
+			  </div>
+			  <div class="col-md-8">
+			  	<div id="Colorado"></div>
+			  	<div id="Kentucky"></div>
+			  	<div id="Illinois"></div>
+			  </div>
+			  <div class="col-md-2">
+			  	<div id="issue-list"></div>
+			  </div>
 			</div>
 
 			<div class="row">
-				<div class="col-md-2">
-					<div class="select">
-						<select id="state-filter">
-							<option value="ALLSTATE">All States</option>
-							<option value="CO">Colorado</option>
-							<option value="IL">Illinois</option>
-							<option value="KY">Kentucy</option>
-						</select>
-					</div>
-				</div>
-
-				<div class="col-md-3">
-					<div class="select">
-						<select id="issue-filter">
-						 	<option value="ALLISSUE">All Issues</option>
-						</select>
-					</div>
-				</div>
-
-				<div class="col-md-2 text-center">
-					<button type="button" class="btn btn-primary" id="shuffle-issue">Shuffle</button>
-				</div>
-
-				<div class="col-md-4">
-					  <div class="issue-list" class="btn-group" role="group"></div>
-				</div>
-
-				<div class="col-md-1"></div>
 			</div>
 		
 
@@ -57,7 +39,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<div class="explain">
-						<p id="exp-state">There are <span id="repnumstate">177</span>
+						<!-- <p id="exp-state">There are <span id="repnumstate">177</span>
 							Republican candidates and <span id="demnumstate">193</span> Democrat
 							candidates in the primaries in <span class="chosenState">Colorado, Kentucky, and Illinois</span>.
 						</p>
@@ -69,26 +51,10 @@
 							<span id="reppercentissue"></span> percent Republican candidates had talked about
 							<span class="chosenIssue"></span> compared to
 							<span id="dempercentissue"></span> percent Democrat candidates.
-						</p>
+						</p> -->
 					</div>
 				</div>
 				<div class="col-md-1"></div>
-			</div>
-		
-			<div class="row" id="rep-opinion">
-				<div id="dem"><h4>Some of the Republican candidate's opinions include:</h4></div>
-				<div class="col-md-2"></div>
-				<div class="col-md-8"><ul id="repopinion" class="list-group"></ul></div>
-				<div class="col-md-2"></div>
-			</div>
-
-
-
-			<div class="row" id="dem-opinion">
-				<div id="rep"><h4>Some of the Democrat candidate believes that:</h4></div>
-				<div class="col-md-2"></div>
-				<div class="col-md-8"><ul id="demopinion" class="list-group"></ul></div>
-				<div class="col-md-2"></div>
 			</div>
 
 	</div>

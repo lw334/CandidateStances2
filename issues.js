@@ -1,247 +1,71 @@
 $ = jQuery;
-var demColor = "#87BACF";
-var repColor = "#ED5B4E";
-var grayColor = "#EEEEEE";
-var chosenState = "ALLSTATE";
-var chosenIssue = "ALLISSUE";
+let demColor = "#87BACF";
+let repColor = "#ED5B4E";
+let grayColor = "#EEEEEE";
+let chosenIssue = "ALLISSUE";
 
 $(document).ready(function(){
   $("#exp-issue").hide();
   $("#rep-opinion").hide();
   $("#dem-opinion").hide();
-  var issues = [];
+  let issues = ['Education', 'Economy', 'Taxes', 'Reform', 'Guns', 'Public Safety + Criminal Justice', 
+  'Environment', 'Healthcare', 'Taxes + Budget', 'Pensions', 'Abortion / Contraception', 'Wages + Benefits', 
+  'Voting', 'Government Operations', 'Diversity / Discrimination', 'Support Services', 'Budget', 
+  'Immigration', 'Transparency + Participation', 'Veterans / VA', 'Housing', 'Transportation', 'Local', 
+  'Healthcare Reform', 'Agriculture', 'Marriage', 'Social Services', 'Criminal Justice', 'Infrastructure', 
+  'Citizen Participation', 'Energy', 'Public Health', 'Court/Prison System', 'Public Transit', 
+  'Civil Liberties', 'LGBTQ', 'Technology', 'Seniors'];
 
-  d3.csv("joined_stances.csv",function (csv) {
-      var dataset = csv;
-      issues = d3.map(dataset, function(d){return d["Issue Tag 1"];}).keys()
-      issues = issues.filter(item => item !== "");
-      addIssues(issues);
-      createRandomIssues(issues);
-      updateGraphText(chosenState, chosenIssue);
-  });
-
-  $("#shuffle-issue").click(() => {
-    createRandomIssues(issues);
-  });
-
-  $("#state-filter").change(() => {
-    chosenState = $("#state-filter option:selected").val();
-    chosenIssue = $("#issue-filter option:selected").val();
-    updateGraphText(chosenState, chosenIssue);
-  });
+      
+  addIssues(issues);
+  updateGraphText(chosenIssue);
 
   $("#issue-filter").change(() => {
     chosenIssue = $("#issue-filter option:selected").val();
-    chosenState = $("#state-filter option:selected").val();
-    updateGraphText(chosenState, chosenIssue);
+    updateGraphText(chosenIssue);
   });
 
 });
 
 function addIssues(issues) {
   issues.forEach((issue)=>{
-    var option = document.createElement("option");
-    option.value = issue.trim();
-    option.text = issue;
-    $("#issue-filter").append(option);
-  });
-}
-
-function createRandomIssues(issues) {
-  $(".issue-list").empty();
-  var rand = shuffle(issues).slice(0,6);
-  rand.forEach((issue)=> {
-    var b = document.createElement("button");
-    b.innerHTML = issue;
-    b.className = "shuffled";
-    b.className = "btn btn-default";
-    b.value = issue;
+    let b = document.createElement("option");
+    b.value = issue.trim();
+    b.text = issue;
+    b.className = "issue";
     b.addEventListener("click", (e)=>{
       console.log(e.target.value);
-      chosenState = $("#state-filter option:selected").val();
       chosenIssue = e.target.value;
-      $("#issue-filter").val(chosenIssue);
-      updateGraphText(chosenState, chosenIssue);
+      updateGraphText(chosenIssue);
     });
-    $(".issue-list").append(b);
+    $("#issue-list").append(b);
   });
 }
 
-function updateGraphText(chosenState, chosenIssue) {
-  $("#repopinion").empty();
-  $("#demopinion").empty();
-  $("#exp-issue").hide();
-  $("#rep-opinion").hide();
-  $("#dem-opinion").hide();
+function updateGraphText(chosenIssue) {
 
-  d3.csv("joined_stances.csv",function (csv) {
-      var dataset = csv;
-      $(".scatter-plot").empty();
-      draw_scatter_plot(dataset, chosenState, chosenIssue);
-      var candidates = d3.nest()
-        .key((d)=>{return d.candidateID;})
-        .entries(dataset);
-      var repnumissue = 0;
-      var demnumissue = 0;
-      var repnumstate = 0;
-      var demnumstate = 0;
-      var reps = [];
-      var dems = [];
-
-      if (chosenState == "ALLSTATE" && chosenIssue == "ALLISSUE") {
-        console.log("all state all issue");
-        repnumstate = 177;
-        demnumstate = 193;
-        $("#repnumstate").text(repnumstate);
-        $("#demnumstate").text(demnumstate);
-        $(".chosenState").text("Colorado, Kentucky, and Illinois");
-      }
-      else if (chosenState == "ALLSTATE" && chosenIssue != "ALLISSUE"){
-        console.log("all state not all issue");
-        repnumstate = 177;
-        demnumstate = 193;
-        $("#repnumstate").text(repnumstate);
-        $("#demnumstate").text(demnumstate);
-        $(".chosenState").text("Colorado, Kentucky, and Illinois");
-        candidates.forEach((candidate)=>{
-          var candidate_party = candidate.values[0]["Party"];
-          var issueList = []
-          var uniqueIssue = []
-          candidate.values.forEach((issue) => {
-            issueList.push(issue["Issue Tag 1"]);
-            uniqueIssue = issueList.filter(function(elem, pos) {
-              return issueList.indexOf(elem) == pos;});
-          });
-          if (uniqueIssue.includes(chosenIssue)) {
-            if ( candidate_party == "Republican" ) {
-              repnumissue += 1;
-              reps.push(candidate);
-            } else if (candidate_party == "Democrat") {
-              demnumissue += 1;
-              dems.push(candidate);
-            }
-          }
-        });
-        sampleOpinions(reps, "#repopinion");
-        sampleOpinions(dems, "#demopinion");
-        $(".chosenIssue").text(chosenIssue);
-        $("#repnumissue").text(repnumissue);
-        $("#demnumissue").text(demnumissue);
-        console.log(repnumissue)
-        console.log(repnumstate)
-        console.log(demnumissue)
-        console.log(demnumstate)
-        $("#reppercentissue").text(toPercent(repnumissue/repnumstate));
-        $("#dempercentissue").text(toPercent(demnumissue/demnumstate));
-        $("#exp-issue").show();
-        if (reps.length) {
-          $("#rep-opinion").show();
-        }
-        if (dems.length) {
-          $("#dem-opinion").show();
-        }
-      }
-      else if (chosenState != "ALLSTATE" && chosenIssue == "ALLISSUE") {
-        console.log("not all state all issue");
-        candidates.forEach((candidate) => {
-          var entry = candidate.values[0];
-          if (entry["state"] == chosenState) {
-            if (entry["Party"] == "Republican") {
-              repnumstate += 1;
-            } else {
-              demnumstate += 1;
-            }
-          }
-        });
-        $("#repnumstate").text(repnumstate);
-        $("#demnumstate").text(demnumstate);
-        $(".chosenState").text($("#state-filter option:selected").text());
-      } else {
-        console.log("not all state not all issue");
-        console.log(chosenState);
-        console.log(chosenIssue);
-        candidates.forEach((candidate) => {
-          var entry = candidate.values[0];
-          if (entry["state"] == chosenState) {
-            if (entry["Party"] == "Republican") {
-              repnumstate += 1;
-            } else {
-              demnumstate += 1;
-            }
-          }
-        });
-        $("#repnumstate").text(repnumstate);
-        $("#demnumstate").text(demnumstate);
-        $(".chosenState").text($("#state-filter option:selected").text());
-        candidates.forEach((candidate)=>{
-          var candidate_party = candidate.values[0]["Party"];
-          var candidate_state = candidate.values[0]["state"];
-          var issueList = []
-          var uniqueIssue = []
-          if (candidate_state == chosenState) {
-            candidate.values.forEach((issue) => {
-              issueList.push(issue["Issue Tag 1"]);
-              uniqueIssue = issueList.filter(function(elem, pos) {
-                return issueList.indexOf(elem) == pos;});
-            });
-            if (uniqueIssue.includes(chosenIssue)) {
-              if ( candidate_party == "Republican" ) {
-                repnumissue += 1;
-                reps.push(candidate);
-              } else if (candidate_party == "Democrat") {
-                demnumissue += 1;
-                dems.push(candidate);
-              }
-            }
-          }
-        });
-        sampleOpinions(reps, "#repopinion");
-        sampleOpinions(dems, "#demopinion");
-        $("#chosenIssue").text(chosenIssue);
-        $("#repnumissue").text(repnumissue);
-        $("#demnumissue").text(demnumissue);
-        $("#reppercentissue").text(toPercent(repnumissue/repnumstate));   
-        $("#dempercentissue").text(toPercent(demnumissue/demnumstate));
-        $("#exp-issue").show();
-        if (reps.length) {
-          $("#rep-opinion").show();
-        }
-        if (dems.length) {
-          $("#dem-opinion").show();
-        }
-      }
-    }); 
-  }
-
-function sampleOpinions(reps, replist) {
-  if (reps.length) {
-    var opinions = []
-    reps.forEach((rep)=>{
-      rep.values.forEach((stance)=>{
-        if (stance["Issue Tag 1"] == chosenIssue) {
-          var l = document.createElement("li");
-          l.className = "list-group-item";
-          l.innerHTML = (stance["First Name"]+ " " + stance["Last Name"]
-          + " running for " + stance["Office"] + " in " + stance["state"] + ": " +
-           stance["Issue Stance"]);
-          opinions.push(l);
-        }
-      });
-    });
-    opinions = shuffle(opinions).slice(0,5);
-    opinions.forEach((l)=>{
-      $(replist).append(l);
+  let states = ["Colorado.csv", "Kentucky.csv", "Illinois.csv"];
+  let stateIDs = ["#Colorado", "#Kentucky", "#Illinois"];
+  let stateHeights = [150,100,400];
+  
+  for (let i = 0; i < 3; i++) {
+    let state = states[i];
+    let stateID = stateIDs[i];
+    let stateHeight = stateHeights[i];
+    // console.log(stateHeight);
+    d3.csv(state,function (csv) {
+      let dataset = csv;
+      $(stateID).empty();
+      console.log(stateID);
+      console.log(stateHeight);
+      draw_scatter_plot(dataset, chosenIssue, stateID, stateHeight);
     });
   }
-}
 
-
-function toPercent(num){
-  return (Math.abs(num)*100).toPrecision(2);
 }
 
 function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
+  let currentIndex = array.length, temporaryValue, randomIndex;
   while (0 !== currentIndex) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
@@ -262,7 +86,7 @@ function partyColor(candidate_party) {
 }
 
 function hasIssue(issues, filterIssue) {
-  var hasIssue = false;
+  let hasIssue = false;
   issues.forEach((issue)=> {
     if (issue["Issue Tag 1"] === filterIssue) {
       hasIssue = true;
@@ -272,33 +96,31 @@ function hasIssue(issues, filterIssue) {
   return hasIssue;
 }
 
-function draw_scatter_plot(dataset, filterState, filterIssue) {
+function draw_scatter_plot(dataset, filterIssue, stateID, stateHeight) {
 
-  var REPDEM = 250;
-  var DEMIND = 500;
-  var DIS = 25;
+  let REPDEM = 250;
+  let DEMIND = 500;
+  let DIS = 25;
 
-  var rep_x = 0;
-  var dem_x = REPDEM + 20; // dividing line value
-  var ind_x = DEMIND; // divinding line value
+  let rep_x = 0;
+  let dem_x = REPDEM + 20; // dividing line value
 
-  var rep_y = 0;
-  var dem_y = 0;
-  var ind_y = 0;
+  let rep_y = 0;
+  let dem_y = 0;
 
   //keeping count
-  var repx = 0;
-  var demx = REPDEM + 20;
-  var indx = 0;
+  let repx = 0;
+  let demx = REPDEM + 20;
 
   // Create a container for the graph
   //FIXME: remember to make the svg responsive
-  var containerWidth = $(".scatter-plot").offsetWidth;
-  var margin = {top: 20, right: 20, bottom: 20, left: 20},
+  let containerWidth = $(stateID).offsetWidth;
+  let margin = {top: 20, right: 20, bottom: 20, left: 20},
       width = 1200 - margin.left - margin.right,
-      height = 525 - margin.top - margin.bottom;
+      height = stateHeight - margin.top - margin.bottom;
+      console.log(height);
 
-  var svg = d3.select("body").select(".scatter-plot")
+  let svg = d3.select("body").select(stateID)
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -306,8 +128,8 @@ function draw_scatter_plot(dataset, filterState, filterIssue) {
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   // // add the tooltip area to the webpage
-  var tooltip = d3.select("body")
-                  .select(".scatter-plot")
+  let tooltip = d3.select("body")
+                  .select(stateID)
                   .append("div")
                   .attr("class", "tooltip")
                   .style("position", "absolute")
@@ -315,7 +137,7 @@ function draw_scatter_plot(dataset, filterState, filterIssue) {
                   .style("visibility","hidden");
 
 
-  var candidates = d3.nest()
+  let candidates = d3.nest()
     .key((d)=>{return d.candidateID;})
     .entries(dataset);
 
@@ -324,7 +146,7 @@ function draw_scatter_plot(dataset, filterState, filterIssue) {
       .enter()
       .append("circle")
       .attr("cx", (d) => {
-        var candidate_party = d.values[0]["Party"];
+        let candidate_party = d.values[0]["Party"];
         if (candidate_party === "Republican") {
           if (rep_x >= REPDEM) {
             rep_x = 0;
@@ -341,7 +163,7 @@ function draw_scatter_plot(dataset, filterState, filterIssue) {
         }
       })
       .attr("cy", (d) => {
-        var candidate_party = d.values[0]["Party"];
+        let candidate_party = d.values[0]["Party"];
         if (candidate_party === "Republican") {
           if (repx >= REPDEM) {
             rep_y += DIS;
@@ -367,25 +189,12 @@ function draw_scatter_plot(dataset, filterState, filterIssue) {
       .attr("data-toggle","modal")
       .attr("data-target", "#myModal")
       .style("fill", (d) => {
-        var issues = d.values;
-        var candidate_party = d.values[0]["Party"];
-        var candidate_state = d.values[0]["state"]
-        if (filterState === "ALLSTATE" && filterIssue === "ALLISSUE") {
+        let issues = d.values;
+        let candidate_party = d.values[0]["Party"];
+        if (filterIssue === "ALLISSUE") {
           return partyColor(candidate_party);
-        } else if (filterState !== "ALLSTATE" && filterIssue === "ALLISSUE") {
-          if (candidate_state !== filterState){
-            return grayColor;
-          } else {
-            return partyColor(candidate_party);
-          }
-        } else if (filterState === "ALLSTATE" && filterIssue !== "ALLISSUE") {
-          if (!hasIssue(issues, filterIssue)) {
-            return grayColor;
-          } else {
-            return partyColor(candidate_party);
-          }
         } else {
-          if (candidate_state === filterState && hasIssue(issues, filterIssue)) {
+          if (hasIssue(issues, filterIssue)) {
             return partyColor(candidate_party);
           } else {
             return grayColor;
@@ -397,8 +206,8 @@ function draw_scatter_plot(dataset, filterState, filterIssue) {
       d3.select(this).attr({
         r: 15
       });
-      var candidate = d.values[0];
-      var party = candidate["Party"];
+      let candidate = d.values[0];
+      let party = candidate["Party"];
       tooltip.style("background-color", function() {
         return partyColor(party);
       });
@@ -420,10 +229,10 @@ function draw_scatter_plot(dataset, filterState, filterIssue) {
     })
     .on("click", function(d) {
       console.log(d);
-      var candidate = d.values[0];
-      var issues = d.values;
-      var candidateIssues = " ";
-      var sourceurl = ""
+      let candidate = d.values[0];
+      let issues = d.values;
+      let candidateIssues = " ";
+      let sourceurl = ""
       $("#candidateName").text(candidate["First Name"] + " " + candidate["Last Name"]);
       if (hasIssue(issues, filterIssue)) {
         issues.forEach((issue) => {
