@@ -8,14 +8,7 @@ $(document).ready(function(){
   $("#exp-issue").hide();
   $("#rep-opinion").hide();
   $("#dem-opinion").hide();
-  let issues = ['Education', 'Economy', 'Taxes', 'Reform', 'Guns', 'Public Safety + Criminal Justice', 
-  'Environment', 'Healthcare', 'Taxes + Budget', 'Pensions', 'Abortion / Contraception', 'Wages + Benefits', 
-  'Voting', 'Government Operations', 'Diversity / Discrimination', 'Support Services', 'Budget', 
-  'Immigration', 'Transparency + Participation', 'Veterans / VA', 'Housing', 'Transportation', 'Local', 
-  'Healthcare Reform', 'Agriculture', 'Marriage', 'Social Services', 'Criminal Justice', 'Infrastructure', 
-  'Citizen Participation', 'Energy', 'Public Health', 'Court/Prison System', 'Public Transit', 
-  'Civil Liberties', 'LGBTQ', 'Technology', 'Seniors'];
-
+  let issues = ['Education', 'Taxes / Budget', 'Economy','Public Safety / Criminal Justice', 'Guns', 'Healthcare', 'Environment / Energy', 'Pensions', 'Abortion / Contraception', 'Wages / Benefits', 'Voting', 'Transportation / Infrastructure', 'Social Services / Support Services', 'Government Operations', 'Transparency / Participation', 'Budget', 'Immigration', 'Veterans / VA', 'Housing', 'Marriage / LGBTQ', 'Agriculture', 'Civil Liberties', 'Privacy', 'People with Disabilities', 'Youth', 'Women', 'Size of Government', 'Minimum Wage', 'Religion', 'Police'];
       
   addIssues(issues);
   updateGraphText(chosenIssue);
@@ -35,6 +28,8 @@ function addIssues(issues) {
     b.className = "issue";
     b.addEventListener("click", (e)=>{
       console.log(e.target.value);
+      $(".issue").removeClass("active");
+      $(e.target).addClass("active");
       chosenIssue = e.target.value;
       updateGraphText(chosenIssue);
     });

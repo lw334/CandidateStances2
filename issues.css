@@ -2,6 +2,19 @@ g:hover {
   cursor:pointer;
 }
 
+.issue:hover {
+  cursor:pointer;
+  color: #000000;
+}
+
+.issue {
+  color:#6C7A89;
+}
+
+.issue.active {
+  color:#000000;
+}
+
 .select {
   font-size: 15px;
   position: absolute;
