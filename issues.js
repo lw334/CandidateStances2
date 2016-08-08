@@ -239,13 +239,16 @@ function draw_scatter_plot(dataset, filterIssue, stateID, stateHeight) {
       tooltip.style("background-color", function() {
         return partyColor(party);
       });
+
       tooltip.text(candidate["First Name"] + " " + candidate["Last Name"])
-           .style("left", (d3.select(this).attr("cx")) + "px")
-           .style("top", (d3.select(this).attr("cy")) + "px")
-           .style("visibility","visible")
-           .transition()
-           .duration(200)
-           .style("opacity", 0.9);
+        // .style("left", (d3.select(this).attr("cx")) + "px")
+        // .style("top", (d3.select(this).attr("cy")) + "px")
+        .style("left", (d3.event.pageX) - 300 + "px")     
+        .style("top", (d3.event.pageY) - 40 + "px")
+        .style("visibility","visible")
+        .transition()
+        .duration(200)
+        .style("opacity", 0.9);
     })
     .on("mouseout", function(d) {
       d3.select(this).attr({
