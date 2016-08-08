@@ -77,6 +77,11 @@ p {
 .explain-label {
   font-size: 15px;
   font-weight: bold;
+  text-align: right;
+}
+
+.exp-party {
+  text-align: center;
 }
 
 .rep {

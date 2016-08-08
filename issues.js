@@ -144,7 +144,7 @@ function draw_scatter_plot(dataset, filterIssue, stateID, stateHeight) {
   //FIXME: remember to make the svg responsive
   let containerWidth = $(stateID).offsetWidth;
   let margin = {top: 20, right: 20, bottom: 20, left: 20},
-      width = 1200 - margin.left - margin.right,
+      width = 600 - margin.left - margin.right,
       height = stateHeight - margin.top - margin.bottom;
       console.log(height);
 
@@ -243,8 +243,8 @@ function draw_scatter_plot(dataset, filterIssue, stateID, stateHeight) {
       tooltip.text(candidate["First Name"] + " " + candidate["Last Name"])
         // .style("left", (d3.select(this).attr("cx")) + "px")
         // .style("top", (d3.select(this).attr("cy")) + "px")
-        .style("left", (d3.event.pageX) - 300 + "px")     
-        .style("top", (d3.event.pageY) - 40 + "px")
+        .style("left", (d3.event.pageX - 300) + "px")     
+        .style("top", (d3.event.pageY - 30) + "px")
         .style("visibility","visible")
         .transition()
         .duration(200)
