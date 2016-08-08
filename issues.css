@@ -72,11 +72,22 @@ g:hover {
 
 p {
   font-size: 15px;
-  text-align: center;
 }
 
-.custom {
+.explain-label {
   font-size: 15px;
+  font-weight: bold;
+}
+
+.rep {
+  color: #ED5B4E;
+  font-size:20px;
+  font-weight: bold;
+}
+
+.dem {
+  color: #87BACF;
+  font-size:20px;
   font-weight: bold;
 }
 

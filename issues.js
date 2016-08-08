@@ -77,8 +77,8 @@ function updateDetailGraph(chosenIssue) {
     
     let repcent = toPercent(repnumissue/repnumstate);
     let demcent = toPercent(demnumissue/demnumstate);
-    $("#demcent").text(demcent);
-    $("#repcent").text(repcent);
+    $("#demcent").text(demcent + "%");
+    $("#repcent").text(repcent + "%");
     $("#chosenIssue").text(chosenIssue);
     $("#exp-issue").show();
   });
