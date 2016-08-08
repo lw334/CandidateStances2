@@ -6,8 +6,7 @@ let chosenIssue = "ALLISSUE";
 
 $(document).ready(function(){
   $("#exp-issue").hide();
-  let issues = 
-['Education', 'Taxes / Budget', 'Economy','Public Safety / Criminal Justice', 'Guns', 'Healthcare', 'Environment / Energy', 'Pensions', 'Abortion / Contraception', 'Wages / Benefits', 'Voting', 'Transportation / Infrastructure', 'Social Services / Support Services', 'Transparency / Participation', 'Immigration', 'Veterans / VA', 'Housing', 'Marriage / LGBTQ', 'Agriculture', 'Civil Liberties / Privacy'];
+  let issues = ['Abortion / Contraception', 'Agriculture', 'Civil Liberties / Privacy', 'Economy', 'Education', 'Environment / Energy', 'Guns', 'Healthcare', 'Housing', 'Immigration', 'Marriage / LGBTQ', 'Pensions', 'Public Safety / Criminal Justice', 'Social Services / Support Services', 'Taxes / Budget', 'Transparency / Participation', 'Transportation / Infrastructure', 'Veterans / VA', 'Voting', 'Wages / Benefits'];
   addIssues(issues);
   updateGraph(chosenIssue);
 });
