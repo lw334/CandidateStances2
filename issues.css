@@ -44,15 +44,18 @@ g:hover {
 
 #co {
   margin-top: 10px;
-  margin-bottom: 150px;
+  margin-bottom: 135px;
 }
 
 #ky {
-  margin-bottom: 100px;
+  margin-bottom: 80px;
 }
 
 #il {
+}
 
+.state-graph {
+  margin-left:95px;
 }
 
 .state-label {
@@ -67,6 +70,15 @@ g:hover {
   text-align: left;
 }
 
+p {
+  font-size: 15px;
+  text-align: center;
+}
+
+.custom {
+  font-size: 15px;
+  font-weight: bold;
+}
 
 
 

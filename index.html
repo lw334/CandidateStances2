@@ -19,35 +19,51 @@
 			  	<p id="il" class="state-label">Illinois</p>
 			  </div>
 			  <div class="col-md-8">
-			  	<div id="Colorado"></div>
-			  	<div id="Kentucky"></div>
-			  	<div id="Illinois"></div>
+			  	<div id="Colorado" class="state-graph"></div>
+			  	<div id="Kentucky" class="state-graph"></div>
+			  	<div id="Illinois" class="state-graph"></div>
 			  </div>
 			  <div class="col-md-2">
 			  	<div id="issue-list"></div>
 			  </div>
 			</div>
 
-	</div>
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<div class="explain">
+						<p>There are 172 Republican candidates and 193 Democrat
+							candidates in the primaries in Colorado, Kentucky, and Illinois.
+						</p>
+						<p id="exp-issue">
+							<span id="repcent" class="custom"></span> percent of Republican candidates and 
+							<span id="demcent" class="custom"></span> percent of Democrat candidates have stances on the issue of <span id="chosenIssue" class="custom"></span>.
+						</p>
+					</div>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
 
-	<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="candidateName"></h4>
-      </div>
-      <div class="modal-body">
-        <p id="candidateStance"></p>
-        <p id="candidateSource"><a href="#"></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+		</div>
+
+			<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="candidateName"></h4>
+		      </div>
+		      <div class="modal-body">
+		        <p id="candidateStance"></p>
+		        <p id="candidateSource"><a href="#"></p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.0/d3.min.js"></script>

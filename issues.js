@@ -6,18 +6,9 @@ let chosenIssue = "ALLISSUE";
 
 $(document).ready(function(){
   $("#exp-issue").hide();
-  $("#rep-opinion").hide();
-  $("#dem-opinion").hide();
   let issues = ['Education', 'Taxes / Budget', 'Economy','Public Safety / Criminal Justice', 'Guns', 'Healthcare', 'Environment / Energy', 'Pensions', 'Abortion / Contraception', 'Wages / Benefits', 'Voting', 'Transportation / Infrastructure', 'Social Services / Support Services', 'Government Operations', 'Transparency / Participation', 'Budget', 'Immigration', 'Veterans / VA', 'Housing', 'Marriage / LGBTQ', 'Agriculture', 'Civil Liberties', 'Privacy', 'People with Disabilities', 'Youth', 'Women', 'Size of Government', 'Minimum Wage', 'Religion', 'Police'];
-      
   addIssues(issues);
-  updateGraphText(chosenIssue);
-
-  $("#issue-filter").change(() => {
-    chosenIssue = $("#issue-filter option:selected").val();
-    updateGraphText(chosenIssue);
-  });
-
+  updateGraph(chosenIssue);
 });
 
 function addIssues(issues) {
@@ -31,33 +22,75 @@ function addIssues(issues) {
       $(".issue").removeClass("active");
       $(e.target).addClass("active");
       chosenIssue = e.target.value;
-      updateGraphText(chosenIssue);
+      updateGraph(chosenIssue);
+      updateDetailGraph(chosenIssue);
     });
     $("#issue-list").append(b);
   });
 }
 
-function updateGraphText(chosenIssue) {
+function updateGraph(chosenIssue) {
 
   let states = ["Colorado.csv", "Kentucky.csv", "Illinois.csv"];
   let stateIDs = ["#Colorado", "#Kentucky", "#Illinois"];
-  let stateHeights = [150,100,400];
+  let stateHeights = [150,95,375];
   
   for (let i = 0; i < 3; i++) {
     let state = states[i];
     let stateID = stateIDs[i];
     let stateHeight = stateHeights[i];
-    // console.log(stateHeight);
     d3.csv(state,function (csv) {
       let dataset = csv;
       $(stateID).empty();
-      console.log(stateID);
-      console.log(stateHeight);
       draw_scatter_plot(dataset, chosenIssue, stateID, stateHeight);
     });
   }
-
 }
+
+function updateDetailGraph(chosenIssue) {
+  let repnumstate = 172;
+  let demnumstate = 193;
+  let repnumissue = 0;
+  let demnumissue = 0;
+
+  d3.csv("joined_stances.csv", function (csv) {
+    let dataset = csv;
+    let candidates = d3.nest()
+        .key((d)=>{return d.candidateID;})
+        .entries(dataset);
+    candidates.forEach((candidate)=>{
+      let candidate_party = candidate.values[0]["Party"];
+      let issueList = []
+      let uniqueIssue = []
+      candidate.values.forEach((issue) => {
+        issueList.push(issue["Issue Tag 1"]);
+        uniqueIssue = issueList.filter(function(elem, pos) {return issueList.indexOf(elem) == pos;});
+      });
+      if (uniqueIssue.includes(chosenIssue)) {
+        if ( candidate_party == "Republican" ) {
+          repnumissue += 1;
+        } else if (candidate_party == "Democrat") {
+          demnumissue += 1;
+        }
+      }
+    });
+    
+    let repcent = toPercent(repnumissue/repnumstate);
+    let demcent = toPercent(demnumissue/demnumstate);
+    $("#demcent").text(demcent);
+    $("#repcent").text(repcent);
+    $("#chosenIssue").text(chosenIssue);
+    $("#exp-issue").show();
+  });
+
+ 
+}
+
+
+function toPercent(num){
+  return (Math.abs(num)*100).toPrecision(2);
+}
+
 
 function shuffle(array) {
   let currentIndex = array.length, temporaryValue, randomIndex;
@@ -228,7 +261,7 @@ function draw_scatter_plot(dataset, filterIssue, stateID, stateHeight) {
       let issues = d.values;
       let candidateIssues = " ";
       let sourceurl = ""
-      $("#candidateName").text(candidate["First Name"] + " " + candidate["Last Name"]);
+      $("#candidateName").text(candidate["First Name"] + " " + candidate["Last Name"] + " - " + candidate["Office"]);
       if (hasIssue(issues, filterIssue)) {
         issues.forEach((issue) => {
           if (issue["Issue Tag 1"] == filterIssue) {
